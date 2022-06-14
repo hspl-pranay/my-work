@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <template
+        id="sale_order_report_inherit_template_id"
+        inherit_id="sale.report_saleorder_document"
+    >
+        <t t-call="web.external_layout">
+            <xpath expr="//div[@name='signature']" position="before">
+                <t t-if="doc.pricelist_id.currency_id.name == 'USD'">
+                    <t t-set="rate" t-value="doc.pricelist_id.currency_id.rate" />                    
+                    <strong>Amount in AWG : <span
+                            t-esc="doc.amount_total *rate"
+                        /></strong>
+                </t>
+
+                <t t-set="currency_info" t-value="doc.get_currency()" />
+                <!-- <t t-set="company" t-value="doc.company_id" /> -->
+                <!-- <t t-set="currency_name" t-value="company.currency_id.name" />
+                <t t-set="currency_rate" t-value="company.currency_id.rate" /> -->
+                
+                <strong>Currency Info : <span
+                    t-esc="currency_info[0]"
+                />
+                <span
+                    t-esc="currency_info[1]"
+                /></strong>
+
+            </xpath>
+        </t>
+    </template>
+
+</odoo>
