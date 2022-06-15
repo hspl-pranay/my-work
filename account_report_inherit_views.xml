@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <template
+        id="invoicer_report_inherit_template_id"
+        inherit_id="account.report_invoice_document"
+    >
+        <t t-call="web.external_layout">
+            <xpath expr="//div[@name='payment_communication']" position="before">
+                <t t-if="o.currency_id.name == 'USD'">
+                    <t t-set="rate" t-value="o.currency_id.rate" />
+                    <strong>Amount in AWG : <span
+                            t-esc="o.amount_total *rate"
+                            t-options='{"widget": "float", "precision": 2}'
+                        /></strong><br /><br />
+                </t>
+            </xpath>
+
+            <xpath expr="//div[@name='payment_communication']" position="before">
+                <t t-if="o.company_id and o.move_type == 'out_invoice' ">
+                    <t t-set="i" t-value="1" />
+                    <t t-foreach="o.company_id.partner_id.bank_ids" t-as="bank">
+                    <tr style="">
+                        <t>
+                            <td><strong>Bank <span t-esc="i" />:</strong></td><br />
+                            <td>AC #: <span
+                                        class="text-nowrap"
+                                        t-esc="bank['acc_number']"
+                                    /></td>,
+                            <td>Bank Name: <span
+                                        class="text-nowrap"
+                                        t-esc="bank['bank_id']['name']"
+                                    /></td>,
+                            <td>Bank Identifier Code: <span
+                                        class="text-nowrap"
+                                        t-esc="bank['bank_id']['bic']"
+                                    /></td>
+                            <br />
+                            <br />
+                        </t>
+                    </tr>
+                    <t t-set="i" t-value="i+1" />
+                    </t>
+                </t>
+            </xpath>
+        </t>
+    </template>
+
+</odoo>
